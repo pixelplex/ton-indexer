@@ -94,7 +94,16 @@ async def get_account_information(
     address: str = Query(..., description='Account address. Can be sent in raw or user-friendly form.')
     ):
     """
-    Get smart contract information.
+    Get smart contract information. \n
+    | Response field             | Description                                                                   | \n \
+    | -------------------------- | ------------------------------------------------------------------------------| \n \
+    | **balance**                | Contracts balance in Toncoins                                                 | \n \
+    | **code**                   | Contracts code base64 encoded                                                 | \n \
+    | **data**                   | Contracts data base64 encoded                                                 | \n \
+    | **last_transaction_lt**    | Last transaction `lt` was sent from current contract                          | \n \
+    | **last_transaction_hash**  | Last transaction `hash` was sent from current contract                        | \n \
+    | **frozen_hash**            | The hash of the account state at the time of freezing, else `null`            | \n \
+    | **status**                 | Current status. Values: `uninitialized`, `frozen`, `active`, `non-existing`   |
     """
     async with httpx.AsyncClient() as client:
         response = await client.get(f'{settings.ton_http_api_endpoint}/getAddressInformation?address={address}')
@@ -109,7 +118,16 @@ async def get_wallet_information(
     ):
     """
     Get wallet smart contract information. The following wallets are supported: `v1r1`, `v1r2`, `v1r3`, `v2r1`, `v2r2`, `v3r1`, `v3r2`, `v4r1`, `v4r2`.
-    In case the account is not a wallet error code 409 is returned.
+    In case the account is not a wallet error code 409 is returneEEEd. \n                                       
+    | Response field             | Description                                                                   | \n \
+    | -------------------------- | ------------------------------------------------------------------------------| \n \
+    | **balance**                | Wallet balance in Toncoins                                                    | \n \
+    | **wallet_type**            | Current wallet type (e.g. `wallet v4 r2`)                                     | \n \
+    | **seqno**                  | Current wallet `seqno`                                                        | \n \
+    | **wallet_id**              | Wallet number assigned for current key.                                       | \n \
+    | **last_transaction_lt**    | Last transaction `lt` was sent from current contract                          | \n \
+    | **last_transaction_hash**  | Last transaction `hash` was sent from current contract                        | \n \
+    | **status**                 | Current status. Values: `uninitialized`, `frozen`, `active`, `non-existing`   |
     """
     async with httpx.AsyncClient() as client:
         response = await client.get(f'{settings.ton_http_api_endpoint}/getWalletInformation?address={address}')
